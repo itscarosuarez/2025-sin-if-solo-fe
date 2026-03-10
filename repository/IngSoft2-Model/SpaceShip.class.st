@@ -171,9 +171,9 @@ SpaceShip >> name [
 ]
 
 { #category : 'action' }
-SpaceShip >> preventMovingUntilRollsAtLeast: aNumber [
+SpaceShip >> preventMovingUntilRollsAtLeast: minimumRoll [
 
-	minimumRollRequired := aNumber
+	minimumRollRequired := minimumRoll
 ]
 
 { #category : 'action' }

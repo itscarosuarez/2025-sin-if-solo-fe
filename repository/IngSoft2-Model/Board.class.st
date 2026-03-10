@@ -16,9 +16,9 @@ Class {
 }
 
 { #category : 'testing' }
-Board class >> hasTheMinimumAmountOfSquares: aNumber [
+Board class >> hasTheMinimumAmountOfSquares: squareCount [
 
-	aNumber < 3 ifTrue: [ Error signal: 'Should have at least 3 squares' ]
+	squareCount < 3 ifTrue: [ Error signal: 'Should have at least 3 squares' ]
 ]
 
 { #category : 'initialization' }

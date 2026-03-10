@@ -13,21 +13,21 @@ Class {
 }
 
 { #category : 'testing' }
-RiggedDice class >> hasAtLeastOneFace:aNumber [
- (aNumber negative or: aNumber =0 )ifTrue: [ 
+RiggedDice class >> hasAtLeastOneFace:faceCount [
+ (faceCount negative or: faceCount =0 )ifTrue: [ 
         Error signal: 'A Dice has to have at least 1 face']
 ]
 
 { #category : 'initialization' }
-RiggedDice class >> withNumberOfFaces:aNumber [
-self hasAtLeastOneFace:aNumber.
-^self new initializeNumberOfFaces: aNumber .
+RiggedDice class >> withNumberOfFaces:faceCount [
+self hasAtLeastOneFace:faceCount.
+^self new initializeNumberOfFaces: faceCount .
 ]
 
 { #category : 'initialization' }
-RiggedDice >> initializeNumberOfFaces: aNumber [
+RiggedDice >> initializeNumberOfFaces: faceCount [
 
-	numberOfFaces := aNumber
+	numberOfFaces := faceCount
 ]
 
 { #category : 'accessing' }
