@@ -17,8 +17,8 @@ RedoCardTest >> test1WhenARedoCardIsUsedAfterAccelerationThenItCopysTheImplement
 	aPlayer1 := SpaceShip named: 'Juan'.
 	aPlayer2 := SpaceShip named: 'Martin'.
 
-	anAccelerationCard := CardAcceleration withIncrement: 1.
-	aRedoCard := CardRedo for: 2.
+	anAccelerationCard := CardAcceleration new.
+	aRedoCard := CardRedo new.
 
 	aDeckOfCards := {
 		                anAccelerationCard.
@@ -46,16 +46,19 @@ RedoCardTest >> test1WhenARedoCardIsUsedAfterAccelerationThenItCopysTheImplement
 	aBoard := aGameSetUp board.
 
 	"aDice setNumbersProvider: { 1. 1. 1. 1 }."
-	aBoard with: aPlayer1 throws: anAccelerationCard.
+	aBoard
+		with: aPlayer1
+		throws: anAccelerationCard
+		targeting: NoTarget new.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 2. "1+1"
-	aBoard with: aPlayer2 throws: aRedoCard.
+	aBoard with: aPlayer2 throws: aRedoCard targeting: NoTarget new.
 	aBoard playNextTurn.
-	self assert: (aBoard positionOf: aPlayer2) equals: 4. "1+1+2=4"
+	self assert: (aBoard positionOf: aPlayer2) equals: 3. "1+2 "
 	aBoard playNextTurn.
-	self assert: (aBoard positionOf: aPlayer1) equals: 6. "2+1+1+3"
+	self assert: (aBoard positionOf: aPlayer1) equals: 5. "2+1+2"
 	aBoard playNextTurn.
-	self assert: (aBoard positionOf: aPlayer2) equals: 8 "4+1+1+2"
+	self assert: (aBoard positionOf: aPlayer2) equals: 6 "3+1+2"
 ]
 
 { #category : 'tests' }
@@ -70,11 +73,10 @@ RedoCardTest >> test2WhenARedoCardIsUsedAfterCancellationCardThenItUsesTheLastIm
 	aPlayer1 := SpaceShip named: 'Juan'.
 	aPlayer2 := SpaceShip named: 'Martin'.
 
-
-	anAccelerationCard := CardAcceleration withIncrement: 1.
+	anAccelerationCard := CardAcceleration new.
 	aGameSetUp equip: aPlayer1 with: anAccelerationCard.
-	aRedoCard := CardRedo for: anAccelerationCard.
-	aCancellationCard := CancellationCard for: anAccelerationCard.
+	aRedoCard := CardRedo new.
+	aCancellationCard := CancellationCard new.
 
 	aDeckOfCards := {
 		                anAccelerationCard.
@@ -82,7 +84,6 @@ RedoCardTest >> test2WhenARedoCardIsUsedAfterCancellationCardThenItUsesTheLastIm
 		                aCancellationCard.
 		                aRedoCard } asOrderedCollection.
 	aGameSetUp assignsInOrder: aDeckOfCards.
-
 
 	aGameSetUp withDices: { aDice }.
 	aGameSetUp withPlayers: {
@@ -93,21 +94,29 @@ RedoCardTest >> test2WhenARedoCardIsUsedAfterCancellationCardThenItUsesTheLastIm
 			                aPlayer1.
 			                aPlayer2 }.
 
-
 	aGameSetUp
 		withABoardNumberOfSquares: 100
 		andTurnManager: aTurnManager.
 
 	aGameSetUp createGameInstance.
 	aBoard := aGameSetUp board.
-	aBoard with: aPlayer1 throws: anAccelerationCard.
-	aBoard with: aPlayer1 throws: anAccelerationCard.
+	aBoard
+		with: aPlayer1
+		throws: anAccelerationCard
+		targeting: NoTarget new.
+	aBoard
+		with: aPlayer1
+		throws: anAccelerationCard
+		targeting: NoTarget new.
 
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 3.
 
-	aBoard with: aPlayer2 throws: aCancellationCard.
-	aBoard with: aPlayer2 throws: aRedoCard.
+	aBoard
+		with: aPlayer2
+		throws: aCancellationCard
+		targeting: anAccelerationCard.
+	aBoard with: aPlayer2 throws: aRedoCard targeting: anAccelerationCard.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer2) equals: 1.
 	aBoard playNextTurn.
@@ -115,7 +124,10 @@ RedoCardTest >> test2WhenARedoCardIsUsedAfterCancellationCardThenItUsesTheLastIm
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer2) equals: 2.
 
-	aBoard with: aPlayer1 throws: anAccelerationCard.
+	aBoard
+		with: aPlayer1
+		throws: anAccelerationCard
+		targeting: NoTarget new.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 6
 ]
@@ -147,8 +159,8 @@ RedoCardTest >> test5WhenARedoCardIsUsedAfterAnAllyCardThenItUsesTheLastImplemen
 		withABoardNumberOfSquares: 100
 		andTurnManager: aTurnManager.
 
-	anAllyCard := CardAlly teamsUpWith: aPlayer2.
-	aRedoCard := CardRedo for: aPlayer4.
+	anAllyCard := CardAlly new.
+	aRedoCard := CardRedo new.
 
 	aDeckOfCards := {
 		                anAllyCard.
@@ -187,10 +199,10 @@ RedoCardTest >> test5WhenARedoCardIsUsedAfterAnAllyCardThenItUsesTheLastImplemen
 
 	self assert: (aBoard positionOf: aPlayer4) equals: 3.
 
-	aBoard with: aPlayer1 throws: anAllyCard. "tira la carta el player 1"
+	aBoard with: aPlayer1 throws: anAllyCard targeting: aPlayer2. "tira la carta el player 1"
 	aBoard playNextTurn.
 	aBoard playNextTurn.
-	aBoard with: aPlayer3 throws: aRedoCard.
+	aBoard with: aPlayer3 throws: aRedoCard targeting: aPlayer4.
 	aBoard playNextTurn.
 	aBoard playNextTurn. "juegan todos + el player 3 tira el redo y hace team con el player 4"
 
@@ -237,8 +249,8 @@ RedoCardTest >> test6WhenARedoCardIsUsedAfterOverLoadThenItCopysTheImplementions
 	aPlayer1 := SpaceShip named: 'Juan'.
 	aPlayer2 := SpaceShip named: 'Martin'.
 
-	anOverLoadCard := CardOverLoad for: aPlayer2.
-	aRedoCard := CardRedo for: aPlayer1.
+	anOverLoadCard := CardOverLoad new.
+	aRedoCard := CardRedo new.
 
 	aDeckOfCards := {
 		                anOverLoadCard.
@@ -269,12 +281,12 @@ RedoCardTest >> test6WhenARedoCardIsUsedAfterOverLoadThenItCopysTheImplementions
 	aBoard := aGameSetUp board.
 
 
-	aBoard with: aPlayer1 throws: anOverLoadCard.
+	aBoard with: aPlayer1 throws: anOverLoadCard targeting: aPlayer2.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 10.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer2) equals: 8.
-	aBoard with: aPlayer2 throws: aRedoCard.
+	aBoard with: aPlayer1 throws: aRedoCard targeting: aPlayer1.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 14.
 	aBoard playNextTurn.
@@ -295,9 +307,9 @@ RedoCardTest >> test7WhenARedoCardIsUsedAfterARedoThenItCopysTheImplementionsOfi
 	aPlayer1 := SpaceShip named: 'Juan'.
 	aPlayer2 := SpaceShip named: 'Martin'.
 
-	anOverLoadCard := CardOverLoad for: aPlayer2.
-	aRedoCard := CardRedo for: aPlayer1.
-	aRedoCard1 := CardRedo for: aPlayer2.
+	anOverLoadCard := CardOverLoad new.
+	aRedoCard := CardRedo new.
+	aRedoCard1 := CardRedo new.
 
 	aDeckOfCards := {
 		                anOverLoadCard.
@@ -326,15 +338,15 @@ RedoCardTest >> test7WhenARedoCardIsUsedAfterARedoThenItCopysTheImplementionsOfi
 
 	aGameSetUp createGameInstance.
 	aBoard := aGameSetUp board.
-	aBoard with: aPlayer1 throws: anOverLoadCard.
+	aBoard with: aPlayer1 throws: anOverLoadCard targeting: aPlayer2.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 10.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer2) equals: 8.
-	aBoard with: aPlayer2 throws: aRedoCard.
+	aBoard with: aPlayer1 throws: aRedoCard targeting: aPlayer1.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 14.
-	aBoard with: aPlayer1 throws: aRedoCard1.
+	aBoard with: aPlayer2 throws: aRedoCard1 targeting: aPlayer2.
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer2) equals: 12
 ]

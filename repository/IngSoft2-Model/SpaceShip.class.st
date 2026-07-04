@@ -14,7 +14,8 @@ Class {
 		'name',
 		'lostTurns',
 		'cardsInHand',
-		'aPositionToMove'
+		'aPositionToMove',
+		'allyShip'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -22,7 +23,7 @@ Class {
 
 { #category : 'initialization' }
 SpaceShip class >> named: aName [ 
-    ^ self new initializeWtihAName:aName.
+    ^ self new initializeWithName:aName.
 ]
 
 { #category : 'comparing' }
@@ -41,6 +42,20 @@ SpaceShip >> actualLapsDone: lapsDone [
 SpaceShip >> adjustLapBy: anAmount [
 
 	laps := laps + anAmount
+]
+
+{ #category : 'action' }
+SpaceShip >> becomesAlliedWith: aShip [
+
+	allyShip := aShip
+]
+
+{ #category : 'action' }
+SpaceShip >> breakAlly [
+
+	allyShip ifNotNil: [
+		allyShip becomesAlliedWith: nil.
+		allyShip := nil ]
 ]
 
 { #category : 'testing' }
@@ -91,6 +106,14 @@ SpaceShip >> equipWith: aCard [
 	cardsInHand add: aCard
 ]
 
+{ #category : 'action' }
+SpaceShip >> formAllyWith: anotherShip [
+
+	self breakAlly.
+	allyShip := anotherShip.
+	anotherShip becomesAlliedWith: self
+]
+
 { #category : 'accessing' }
 SpaceShip >> fuelSystem [
 
@@ -130,8 +153,14 @@ SpaceShip >> hasFule [
 	^ fuelSistem validateCurrentFuleOf: self
 ]
 
+{ #category : 'action' }
+SpaceShip >> increaseFuelCapacityBy: anAmount [
+
+	fuelSistem increaseFuelCapacityBy: anAmount
+]
+
 { #category : 'initialization' }
-SpaceShip >> initializeWtihAName: aName [
+SpaceShip >> initializeWithName: aName [
 
 	name := aName.
 	cardsInHand := OrderedCollection new.
@@ -195,6 +224,12 @@ SpaceShip >> rechargeFule [
 SpaceShip >> removeCard: aCard [
 
 	cardsInHand remove: aCard
+]
+
+{ #category : 'action' }
+SpaceShip >> sharesFuelWithAlly [
+
+	allyShip ifNotNil: [ fuelSistem sharesFuleWith: allyShip fuelSystem ]
 ]
 
 { #category : 'action' }

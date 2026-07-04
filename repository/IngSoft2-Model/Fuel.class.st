@@ -50,6 +50,14 @@ Fuel >> hasFuelToPlay [
 	^ self isBiggerThanCero or: fuelPartner isBiggerThanCero
 ]
 
+{ #category : 'action' }
+Fuel >> increaseFuelCapacityBy: anAmount [
+
+	initialFuel := initialFuel + anAmount.
+	self recharge
+
+]
+
 { #category : 'initialization' }
 Fuel >> initializeWithAnAmount: aFuelAmount [
 
@@ -71,9 +79,16 @@ Fuel >> recharge [
 ]
 
 { #category : 'action' }
+Fuel >> sharesFule: aFuleSystem [
+
+	fuelPartner := aFuleSystem
+]
+
+{ #category : 'action' }
 Fuel >> sharesFuleWith: anotherSystem [
 
-	fuelPartner := anotherSystem
+	fuelPartner := anotherSystem.
+	anotherSystem sharesFule: self
 ]
 
 { #category : 'validating' }
