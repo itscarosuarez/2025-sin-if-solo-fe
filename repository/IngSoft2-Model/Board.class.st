@@ -18,17 +18,20 @@ Class {
 { #category : 'testing' }
 Board class >> hasTheMinimumAmountOfSquares: squareCount [
 
-	squareCount < 3 ifTrue: [ Error signal: 'Should have at least 3 squares' ]
+	squareCount < 3 ifTrue: [
+		Error signal: 'Should have at least 3 squares' ]
 ]
 
 { #category : 'initialization' }
-Board class >> withNumberOfSquares: aNumberOfSquares withSizeInParsec: aSizeInParsec andA: aDeck [
+Board class >> withNumberOfSquares: aNumberOfSquares sizeInParsec: aSizeInParsec deck: aDeck tiles: someTiles [
 
 	self hasTheMinimumAmountOfSquares: aNumberOfSquares.
+
 	^ self new
 		  initializeWithNumberOfSquares: aNumberOfSquares
-		  andSizeInParsec: aSizeInParsec
-		  andADeckOfCards: aDeck
+		  sizeInParsec: aSizeInParsec
+		  deck: aDeck
+		  tiles: someTiles
 ]
 
 { #category : 'action' }
@@ -47,12 +50,6 @@ Board >> applySpecialTiletoA: spaceShip ofAll: spaceShips [
 		onBoardOfSize: self
 ]
 
-{ #category : 'comparing' }
-Board >> contains: aSpecialTiles [
-
-	specialTiles := aSpecialTiles
-]
-
 { #category : 'action' }
 Board >> distanceFrom: origin to: destination [
 
@@ -69,13 +66,14 @@ Board >> givesACardTo: aSpaceShip [
 ]
 
 { #category : 'initialization' }
-Board >> initializeWithNumberOfSquares: aNumberOfSquares andSizeInParsec: aSizeInParsec andADeckOfCards: aDeck [
+Board >> initializeWithNumberOfSquares: aNumberOfSquares sizeInParsec: aSizeInParsec deck: aDeck tiles: someSpecialTiles [
 
 	maximumSquares := aNumberOfSquares.
 	sizeInParsec := aSizeInParsec.
 	deckOfCards := aDeck.
 	specialTiles := OrderedCollection new.
-	lastSpecialTileEffect := NoEffect new
+	lastSpecialTileEffect := NoEffect new.
+	specialTiles := someSpecialTiles
 ]
 
 { #category : 'accessing' }
@@ -97,9 +95,7 @@ Board >> setLapsAndGetNewPositionFrom: totalPosition for: aSpaceShip [
 { #category : 'accessing' }
 Board >> specialTileAt: position [
 
-	^ specialTiles
-		  detect: [ :tile | tile includesA: position ]
-		  
+	^ specialTiles detect: [ :tile | tile includesA: position ]
 ]
 
 { #category : 'action' }

@@ -4,7 +4,7 @@ OverLoad Card
 "
 Class {
 	#name : 'CardOverLoad',
-	#superclass : 'Object',
+	#superclass : 'Card',
 	#instVars : [
 		'spaceShipToOverLoad'
 	],
@@ -12,45 +12,19 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'instance creation' }
-CardOverLoad class >> for: aSpaceShip [
+{ #category : 'action' }
+CardOverLoad >> playedBy: aSpaceShip targeting: targetSpaceship in: aGame [
 
-	^ self new initializeOverLoadFor: aSpaceShip
+	spaceShipToOverLoad := targetSpaceship.
+	aGame playsPermanentCard: self
 ]
 
 { #category : 'action' }
-CardOverLoad >> applyEffectTo: spaceShip with: dicesInGameBoard inGame: game onABoard: aBoard [
+CardOverLoad >> rollAdjustmentFor: aSpaceship [ 
 
-	| rolledNumberAdjust |
-	rolledNumberAdjust := 0.
+	^ aSpaceship = spaceShipToOverLoad
+		ifTrue: [ -2 ]
+		ifFalse: [ 0 ]
 
 
-	spaceShip = spaceShipToOverLoad ifTrue: [
-		spaceShip goBack: 2 onBoardOfSize: aBoard numberOfSquares ].
-
-	game upDateLastCardPlayed: self
-]
-
-{ #category : 'action' }
-CardOverLoad >> changeTo: anImplementation [
-
-	^ self class for: anImplementation
-]
-
-{ #category : 'initialization' }
-CardOverLoad >> initializeOverLoadFor: aSpaceShip [
-
-	spaceShipToOverLoad := aSpaceShip
-]
-
-{ #category : 'testing' }
-CardOverLoad >> isLastBeingPlayedIn: aBoard [
-
-	aBoard upDateLastCardPlayed: self
-]
-
-{ #category : 'testing' }
-CardOverLoad >> isPermanent [
-
-	^ true
 ]

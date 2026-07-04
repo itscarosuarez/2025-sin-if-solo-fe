@@ -4,7 +4,7 @@ AllyCard
 "
 Class {
 	#name : 'CardAlly',
-	#superclass : 'Object',
+	#superclass : 'Card',
 	#instVars : [
 		'spaceShipToTeamUp'
 	],
@@ -12,38 +12,15 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'initialization' }
-CardAlly class >> teamsUpWith: aSpaceShip [
+{ #category : 'action' }
+CardAlly >> applyInstantaneousEffectIn: aGame [
 
-	^ self new initializeAllyCardTeamsUpWith: aSpaceShip
+	aGame formsAlianceWith: spaceShipToTeamUp
 ]
 
 { #category : 'action' }
-CardAlly >> applyEffectTo: spaceShip with: dicesInGameBoard inGame: game onABoard: aBoard [
+CardAlly >> playedBy: aSpaceship targeting: aTarget in: aGame [
 
-	game hasAnAlianceFrom: spaceShip and: spaceShipToTeamUp
-]
-
-{ #category : 'action' }
-CardAlly >> changeTo: anImplementation [
-
-	^ self class teamsUpWith: anImplementation
-]
-
-{ #category : 'initialization' }
-CardAlly >> initializeAllyCardTeamsUpWith: aSpaceShip [
-
-	spaceShipToTeamUp := aSpaceShip
-]
-
-{ #category : 'testing' }
-CardAlly >> isLastBeingPlayedIn: aBoard [
-
-	aBoard upDateLastCardPlayed: self
-]
-
-{ #category : 'testing' }
-CardAlly >> isPermanent [
-
-	^ true
+	spaceShipToTeamUp := aTarget.
+	aGame playsPermanentCard: self
 ]

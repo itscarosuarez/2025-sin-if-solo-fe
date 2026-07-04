@@ -4,7 +4,7 @@ Repeta Card
 "
 Class {
 	#name : 'CardRepeat',
-	#superclass : 'Object',
+	#superclass : 'Card',
 	#instVars : [
 		'spaceship'
 	],
@@ -12,47 +12,17 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'instance creation' }
-CardRepeat class >> for: aSpaceShip [
+{ #category : 'action' }
+CardRepeat >> applyInstantaneousEffectIn: aGame [ 
 
-	^ self new initializationFor: aSpaceShip
+	aGame applyRepeatEffectWith: spaceship
+
+
 ]
 
 { #category : 'action' }
-CardRepeat >> applyEffectTo: aSpaceShip with: dicesInGameBoard inGame: game onABoard: aBoard [
+CardRepeat >> playedBy: aSpaceship targeting: aTarget in: aGame [
 
-	game applyRepeatEffectWith: spaceship
-
-
-	
-]
-
-{ #category : 'verification' }
-CardRepeat >> chosenOnIsIn: cardsInGame [
-
-	^ true
-]
-
-{ #category : 'initialization' }
-CardRepeat >> initializationFor: aSpaceship [
-
-	spaceship := aSpaceship
-]
-
-{ #category : 'testing' }
-CardRepeat >> isInstantaneous [
-
-	^ true
-]
-
-{ #category : 'testing' }
-CardRepeat >> isLastBeingPlayedIn: aBoard [
-
-	aBoard upDateLastCardPlayed: self
-]
-
-{ #category : 'testing' }
-CardRepeat >> isPermanent [
-
-	^ false
+	spaceship := aTarget.
+	aGame playsInstantaneousCard: self
 ]

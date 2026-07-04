@@ -2,14 +2,14 @@
 RestartFuelReward class
 "
 Class {
-	#name : 'RestartFuelReward',
+	#name : 'RechargeFuelReward',
 	#superclass : 'Object',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'operations' }
-RestartFuelReward >> applyTo: aSpaceShip [
+RechargeFuelReward >> applyTo: aSpaceShip [
 
-	aSpaceShip rechargeFule
+	aSpaceShip increaseFuelCapacityBy: 1
 ]
