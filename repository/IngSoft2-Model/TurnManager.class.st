@@ -33,6 +33,17 @@ TurnManager >> isAboutToPlay: aSpaceshipToThrowCard [
 	^ aSpaceshipToThrowCard = (spaceShipsInOrder at: 1)
 ]
 
+{ #category : 'action' }
+TurnManager >> reversedOrder [
+
+| currentPlayer theOthers |
+currentPlayer :=spaceShipsInOrder first.
+theOthers := spaceShipsInOrder allButFirst.
+
+spaceShipsInOrder := OrderedCollection with: currentPlayer.
+spaceShipsInOrder  addAll: theOthers reversed. 
+]
+
 { #category : 'accessing' }
 TurnManager >> spaceShipWhoseTurnItIsFrom: spaceShips [
 
