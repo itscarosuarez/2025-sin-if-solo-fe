@@ -192,6 +192,163 @@ InstantCardTest >> test13WhenThePermanentCardIWhichWantsToGetCancelledIsntBeingP
 ]
 
 { #category : 'tests' }
+InstantCardTest >> test14WhenASkipCardIsUsedThenThePlayerLosesItsTurn [
+
+	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aTurnManager aDeckOfCards aSkipCard |
+	aGameSetUp := GameSetup new.
+
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 1. 1. 1. 1 }.
+
+	aPlayer1 := SpaceShip named: 'Juan'.
+	aPlayer2 := SpaceShip named: 'Martin'.
+
+	aSkipCard := CardSkip new.
+
+	aDeckOfCards := {
+		                aSkipCard.
+		                aSkipCard.
+		                aSkipCard.
+		                aSkipCard } asOrderedCollection.
+	aGameSetUp assignsRandomly: aDeckOfCards.
+	aGameSetUp equip: aPlayer2 with: aSkipCard.
+
+	aGameSetUp withDices: { aDice }.
+	aGameSetUp withPlayers: {
+			aPlayer1.
+			aPlayer2 }.
+
+	aTurnManager := TurnManager withOrder: {
+			                aPlayer1.
+			                aPlayer2 }.
+
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+	aGameSetUp createGameInstance.
+	aBoard := aGameSetUp board.
+
+	aBoard
+		with: aPlayer2
+		throws: aSkipCard
+		targeting: NoTarget new.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 0.
+	self assert: (aBoard positionOf: aPlayer2) equals: 1.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 1.
+	self assert: (aBoard positionOf: aPlayer2) equals: 1.
+]
+
+{ #category : 'tests' }
+InstantCardTest >> test15WhenADoubleCardIsUsedThenThePlayerHasThePrivilegeOfRollingTheDiceAgain [
+
+	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aTurnManager aDeckOfCards aDoubleCard |
+	aGameSetUp := GameSetup new.
+
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 1. 1. 1. 1 }.
+
+	aPlayer1 := SpaceShip named: 'Juan'.
+	aPlayer2 := SpaceShip named: 'Martin'.
+
+	aDoubleCard := CardDouble new.
+
+	aDeckOfCards := {
+		                aDoubleCard.
+		                aDoubleCard.
+		                aDoubleCard.
+		                aDoubleCard } asOrderedCollection.
+	aGameSetUp assignsRandomly: aDeckOfCards.
+	aGameSetUp equip: aPlayer1 with: aDoubleCard.
+
+	aGameSetUp withDices: { aDice }.
+	aGameSetUp withPlayers: {
+			aPlayer1.
+			aPlayer2 }.
+
+	aTurnManager := TurnManager withOrder: {
+			                aPlayer1.
+			                aPlayer2 }.
+
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+	aGameSetUp createGameInstance.
+	aBoard := aGameSetUp board.
+
+	aBoard
+		with: aPlayer1
+		throws: aDoubleCard
+		targeting: NoTarget new.
+		
+	self assert: (aBoard positionOf: aPlayer1) equals: 1.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 2.
+	self assert: (aBoard positionOf: aPlayer2) equals: 0.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer2) equals: 1.
+]
+
+{ #category : 'tests' }
+InstantCardTest >> test16WhenAReverseCardIsUsedThenTheTurnOrderIsInverted [
+
+	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aPlayer3 aTurnManager aDeckOfCards aReverseCard |
+	aGameSetUp := GameSetup new.
+
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 1. 1. 1. 1 }.
+
+	aPlayer1 := SpaceShip named: 'Juan'.
+	aPlayer2 := SpaceShip named: 'Martin'.
+	aPlayer3 := SpaceShip named: 'Carlos'.
+
+	aReverseCard := CardReverse new.
+
+	aDeckOfCards := {
+		                aReverseCard.
+		                aReverseCard.
+		                aReverseCard.
+									aReverseCard.
+		                aReverseCard.
+		                aReverseCard } asOrderedCollection.
+	aGameSetUp assignsRandomly: aDeckOfCards.
+	aGameSetUp equip: aPlayer1 with: aReverseCard.
+
+	aGameSetUp withDices: { aDice }.
+	aGameSetUp withPlayers: {
+			aPlayer1.
+			aPlayer2. aPlayer3 }.
+
+	aTurnManager := TurnManager withOrder: {
+			                aPlayer1.
+			                aPlayer2. aPlayer3}.
+
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+	aGameSetUp createGameInstance.
+	aBoard := aGameSetUp board.
+
+	aBoard
+		with: aPlayer1
+		throws: aReverseCard
+		targeting: NoTarget new.
+		
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 1.
+	
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer3) equals: 1.
+	self assert: (aBoard positionOf: aPlayer2) equals: 0.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer2) equals: 1.
+]
+
+{ #category : 'tests' }
 InstantCardTest >> test1ARepeatCardIsUsedAfterFallinginABonusTileThenTheAssignedSpaceshipGetsAnotherCard [
 
 	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aTurnManager aDeckOfCards anAccelerationCard aCancellationCard aRepeat |

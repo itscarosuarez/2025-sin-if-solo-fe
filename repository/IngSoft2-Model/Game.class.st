@@ -186,11 +186,24 @@ Game >> remove: cardToCancel [
 ]
 
 { #category : 'action' }
+Game >> reverseTurnOrderDueToCard [
+turnManager reversedOrder 
+]
+
+{ #category : 'action' }
 Game >> rollAdjustmentFor: aSpaceship [
   ^ cardsInGame sum: [ :card |
         card rollAdjustmentFor: aSpaceship
     ]
 
+]
+
+{ #category : 'action' }
+Game >> rollAgainDueToDoubleCard [
+
+| currentSpaceship |
+currentSpaceship := turnManager spaceShipWhoseTurnItIsFrom: spaceShips.
+self move: currentSpaceship with: dicesInGameBoard 
 ]
 
 { #category : 'accessing' }
@@ -207,6 +220,12 @@ Game >> skipNextTurn [
 	turnManager updateTurn: spaceShips.
 	spaceShip losesOneRound.
 	spaceShip rechargeFule
+]
+
+{ #category : 'action' }
+Game >> skipTurnDueToCard [
+
+turnManager updateTurn: spaceShips 
 ]
 
 { #category : 'accessing' }
