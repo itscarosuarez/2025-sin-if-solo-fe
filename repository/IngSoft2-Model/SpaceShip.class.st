@@ -180,6 +180,12 @@ SpaceShip >> initializeWithName: aName [
 ]
 
 { #category : 'action' }
+SpaceShip >> leavesJail [
+
+requiredRollToLeaveJail := 0
+]
+
+{ #category : 'action' }
 SpaceShip >> losesOneRound [
 
 	lostTurns := 2

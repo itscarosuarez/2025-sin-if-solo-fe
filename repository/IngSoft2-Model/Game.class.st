@@ -78,6 +78,12 @@ Game >> formsAlianceWith: anotherSpaceShip [
 	spaceShipMoving sharesFuelWithAlly
 ]
 
+{ #category : 'action' }
+Game >> getsFreeFromJail: aSpaceship [
+
+(self spaceShipMatching: aSpaceship) leavesJail 
+]
+
 { #category : 'testing' }
 Game >> hasActiveCard: cardToCancel [
 
