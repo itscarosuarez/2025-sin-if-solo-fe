@@ -353,6 +353,46 @@ TileTest >> test15WhenManySpaceShipsFallInHyperJumpThenTheyAllAdvanceTheAmountOf
 ]
 
 { #category : 'tests' }
+TileTest >> test16WhenASpaceshipFallsInJailThenItCantMoveItGetsTheMaxDicesRoll [
+
+	| aGameSetUp aDice aBoard aPlayer1 aWinnerSystem aTurnManager |
+	aGameSetUp := GameSetup new.
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 2. 3. 5. 6 }.
+
+	aPlayer1 := SpaceShip named: 'Fran'.
+
+	aGameSetUp withPlayers: { aPlayer1 }.
+	aGameSetUp withDices: { aDice }.
+
+	aTurnManager := TurnManager withOrder: { aPlayer1 }.
+
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+
+	aGameSetUp withTiles: {
+			(WormHole from: 1 to: 1).
+			(Jail in: 2 needingMaximumRoll: 6) }.
+
+	aGameSetUp withMaximumLapsToWin: 100.
+	aGameSetUp createGameInstance.
+
+
+	aBoard := aGameSetUp board.
+	aWinnerSystem := aGameSetUp winnerSystem.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 2.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 2.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 2.
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 8.
+]
+
+{ #category : 'tests' }
 TileTest >> test1WhenMinimumRollIsntMetThenTheSpaceshipIsHeldByTheHyperGravity [
 
 	| aGameSetUp aDice aBoard aPlayer1 aWinnerSystem aTurnManager |
@@ -765,4 +805,36 @@ TileTest >> testF2WhenASpecialTilePositionIsOutOfTheBoardMaximumSizeThenTheGameC
 		should: [ aGameSetUp createGameInstance ]
 		raise: Error
 		withMessageText: 'Tile position is out of board bounds.'
+]
+
+{ #category : 'tests' }
+TileTest >> testF3WhenTheJailTileMaxNumberNeededDoesntMatchTheMaxRollNumberThenTheCreationFails [
+
+	| aGameSetUp aDice aPlayer1 aTurnManager |
+	aGameSetUp := GameSetup new.
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 2. 1. 5. 4 }.
+
+	aPlayer1 := SpaceShip named: 'Fran'.
+
+	aGameSetUp withPlayers: { aPlayer1 }.
+
+	aGameSetUp withDices: { aDice }.
+	aTurnManager := TurnManager withOrder: { aPlayer1 }.
+
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+	aGameSetUp withTiles: {
+			(WormHole from: 1 to: 1).
+			(Jail in: 2 needingMaximumRoll: 5) }.
+
+
+	aGameSetUp withMaximumLapsToWin: 100.
+
+	self
+		should: [ aGameSetUp createGameInstance ]
+		raise: Error
+		withMessageText: 'rhe jail needed number has to be the dice max number possible.'
 ]

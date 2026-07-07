@@ -15,7 +15,8 @@ Class {
 		'lostTurns',
 		'cardsInHand',
 		'aPositionToMove',
-		'allyShip'
+		'allyShip',
+		'requiredRollToLeaveJail'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -61,7 +62,7 @@ SpaceShip >> breakAlly [
 { #category : 'testing' }
 SpaceShip >> canMoveWith: rolledNumber [
 
-	^ rolledNumber >= minimumRollRequired
+	^ rolledNumber >= minimumRollRequired and: rolledNumber >= requiredRollToLeaveJail
 ]
 
 { #category : 'testing' }
@@ -153,6 +154,11 @@ SpaceShip >> hasFule [
 	^ fuelSistem validateCurrentFuleOf: self
 ]
 
+{ #category : 'testing' }
+SpaceShip >> hasToRoll: aValue [ 
+requiredRollToLeaveJail := aValue 
+]
+
 { #category : 'action' }
 SpaceShip >> increaseFuelCapacityBy: anAmount [
 
@@ -169,7 +175,8 @@ SpaceShip >> initializeWithName: aName [
 	fuelSistem := 0.
 	lostTurns := 0.
 	laps := 0.
-	minimumRollRequired := 0
+	minimumRollRequired := 0.
+	requiredRollToLeaveJail := 0
 ]
 
 { #category : 'action' }

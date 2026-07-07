@@ -120,6 +120,7 @@ Game >> move: aSpaceShip with: dices [
 	rolledNumber := self rolledNumberSumOf: dices.
 	spaceShipMoving := aSpaceShip.
 	(aSpaceShip canMoveWith: rolledNumber) ifFalse: [ ^ self ].
+	aSpaceShip leavesJail.
 	self
 		move: aSpaceShip
 		forwardBy: rolledNumber + (self rollAdjustmentFor: aSpaceShip).

@@ -349,6 +349,59 @@ InstantCardTest >> test16WhenAReverseCardIsUsedThenTheTurnOrderIsInverted [
 ]
 
 { #category : 'tests' }
+InstantCardTest >> test17WhenAFreedomCardIsUsedThenThePlayerLeavesJail [
+
+	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aTurnManager aDeckOfCards aFreedomCard |
+	aGameSetUp := GameSetup new.
+
+	aDice := RiggedDice withNumberOfFaces: 6.
+	aDice setNumbersProvider: { 2. 3. 1}.
+
+	aPlayer1 := SpaceShip named: 'Juan'.
+	aPlayer2 := SpaceShip named: 'Martin'.
+
+	aFreedomCard := CardFreedom new.
+
+	aDeckOfCards := {
+		                aFreedomCard.
+		                aFreedomCard.
+		                aFreedomCard.
+									aFreedomCard } asOrderedCollection.
+	aGameSetUp assignsRandomly: aDeckOfCards.
+	aGameSetUp equip: aPlayer1 with: aFreedomCard.
+
+	aGameSetUp withDices: { aDice }.
+	aGameSetUp withPlayers: {
+			aPlayer1.
+			aPlayer2 }.
+
+	aTurnManager := TurnManager withOrder: {
+			                aPlayer1.
+			                aPlayer2}.
+aGameSetUp withTiles: { (Jail in: 2 needingMaximumRoll: 6) }.
+	aGameSetUp
+		withABoardNumberOfSquares: 100
+		andTurnManager: aTurnManager.
+
+	aGameSetUp createGameInstance.
+	aBoard := aGameSetUp board.
+		
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 2.
+	
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer2) equals: 3.
+	
+		aBoard
+		with: aPlayer1
+		throws: aFreedomCard
+		targeting: NoTarget new.
+		
+	aBoard playNextTurn.
+	self assert: (aBoard positionOf: aPlayer1) equals: 3.
+]
+
+{ #category : 'tests' }
 InstantCardTest >> test1ARepeatCardIsUsedAfterFallinginABonusTileThenTheAssignedSpaceshipGetsAnotherCard [
 
 	| aGameSetUp aDice aBoard aPlayer1 aPlayer2 aTurnManager aDeckOfCards anAccelerationCard aCancellationCard aRepeat |
