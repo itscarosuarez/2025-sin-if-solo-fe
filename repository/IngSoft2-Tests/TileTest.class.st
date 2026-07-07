@@ -389,7 +389,7 @@ TileTest >> test16WhenASpaceshipFallsInJailThenItCantMoveItGetsTheMaxDicesRoll [
 	aBoard playNextTurn.
 	self assert: (aBoard positionOf: aPlayer1) equals: 2.
 	aBoard playNextTurn.
-	self assert: (aBoard positionOf: aPlayer1) equals: 8.
+	self assert: (aBoard positionOf: aPlayer1) equals: 8
 ]
 
 { #category : 'tests' }
@@ -836,5 +836,6 @@ TileTest >> testF3WhenTheJailTileMaxNumberNeededDoesntMatchTheMaxRollNumberThenT
 	self
 		should: [ aGameSetUp createGameInstance ]
 		raise: Error
-		withMessageText: 'rhe jail needed number has to be the dice max number possible.'
+		withMessageText:
+		'rhe jail needed number has to be the dice max number possible.'
 ]

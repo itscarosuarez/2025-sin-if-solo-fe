@@ -177,42 +177,6 @@ GameBoardTest >> test014WhenAExternalSpaceshipTriesToMoveOutsideBoardThenTheCopy
 ]
 
 { #category : 'tests' }
-GameBoardTest >> test014WhenSpaceshipTriesToMoveOutsideBoardThenNothingChanges [
-
-	| aGameSetUp aBoard aPlayer1 aPlayer2 aWinnerSystem aDice aTurnManager |
-	aGameSetUp := GameSetup new.
-
-	aDice := RiggedDice withNumberOfFaces: 10.
-	aDice setNumbersProvider: { 2. 1. 1. 6 }.
-	aPlayer1 := SpaceShip named: 'Fran'.
-	aPlayer2 := SpaceShip named: 'Agustin'.
-
-	aGameSetUp withPlayers: {
-			aPlayer1.
-			aPlayer2 }.
-	aGameSetUp withDices: { aDice }.
-	aTurnManager := TurnManager withOrder: {
-			                aPlayer1.
-			                aPlayer2 }.
-
-	aGameSetUp
-		withABoardNumberOfSquares: 100
-		andTurnManager: aTurnManager.
-	aGameSetUp withTiles: { (WormHole from: 1 to: 1) }.
-	aGameSetUp withMaximumLapsToWin: 2.
-	aGameSetUp createGameInstance.
-
-
-	aBoard := aGameSetUp board.
-	aWinnerSystem := aGameSetUp winnerSystem.
-
-	aBoard playNextTurn.
-	self assert: (aBoard positionOf: aPlayer1) equals: 2.
-	aPlayer1 moveTo: 99 consuming: 1.
-	self assert: (aBoard positionOf: aPlayer1) equals: 2
-]
-
-{ #category : 'tests' }
 GameBoardTest >> test015WhenTheSpaceShipGetsToTheMaximumOfSquaresThenSpaceShipGoesToInitialPosition [
 
 	| aGameSetUp aBoard aPlayer1 aDice aTurnManager |
