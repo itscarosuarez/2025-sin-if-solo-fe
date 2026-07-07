@@ -14,7 +14,7 @@ Class {
 { #category : 'initialization' }
 Jail class >> in: aPosition needingMaximumRoll: aValue [
 
-^self new initializeJailWith: aPosition needingMaximumRoll: aValue.
+	^ self new initializeJailWith: aPosition needingMaximumRoll: aValue
 ]
 
 { #category : 'action' }
@@ -29,7 +29,7 @@ Jail >> applyConsequenceTo: allSpaceShips onBoardOfSize: aBoard [
 { #category : 'action' }
 Jail >> applyEffectToSpecific: spaceship on: board [
 
-	spaceship hasToRoll: maxRollNeeded 
+	spaceship hasToRoll: maxRollNeeded
 ]
 
 { #category : 'initialization' }
